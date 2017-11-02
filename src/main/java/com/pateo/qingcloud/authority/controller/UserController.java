@@ -5,11 +5,9 @@ import com.pateo.qingcloud.authority.service.UserService;
 import com.pateo.qingcloud.authority.vo.result.Status;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author sean
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("user")
+@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
@@ -38,5 +37,13 @@ public class UserController {
     }
 
 
+    @GetMapping(value = "/login")
+    @ApiOperation(value = "登陆账号", httpMethod = "POST", response = Status.class, notes = "返回状态")
+    public Status login(@RequestParam String name,
+                        @RequestParam String password) {
+        log.info("账号：{}，密码：{}",name,password);
+        return Status.success();
+
+    }
 
 }

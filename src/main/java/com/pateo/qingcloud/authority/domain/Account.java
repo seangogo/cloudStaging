@@ -39,7 +39,7 @@ public class Account extends BaseEntity<String> {
     /**
      * 密码过期时间
      */
-    private long expire_time;
+    private Date expire_time;
 
     /**
     *密码修改时间
@@ -59,6 +59,6 @@ public class Account extends BaseEntity<String> {
     /**
      * 关联用户
      */
-    @ManyToOne
+    @ManyToOne()
     private User user;
 }
