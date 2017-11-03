@@ -31,7 +31,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				 .and()
 				 .authorizeRequests()
 				 .antMatchers("/imooc-signIn.html").permitAll()
-				 .antMatchers("/swagger-ui.html").permitAll()
 				 .anyRequest()
 				 .authenticated()
 		         .and().csrf().disable();

@@ -7,12 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /**
  * @author sean
@@ -32,7 +27,7 @@ public class UserController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "返回状态", httpMethod = "POST", response = Status.class, notes = "返回状态")
-    public Status addUser1(@ApiParam(required = true, name = "userSaveVo", value = "用户添加vo")
+    public Status addUser(@ApiParam(required = true, name = "userSaveVo", value = "用户添加vo")
                               @RequestBody User userSaveVo) {
         //添加用户
         userService.save(userSaveVo);
@@ -52,26 +47,4 @@ public class UserController {
     }
 
 
-
-    @PostMapping(value = "/list")
-    @ApiOperation(value = "用户列表", httpMethod = "POST", response = Status.class, notes = "获取用户列表")
-    public Status getUserList(@PageableDefault Pageable pageable
-            /*@ApiParam(name = "userListSearchVo", value = "用户列表查询条件")
-            @RequestBody  userListSearchVo*/){
-        return Status.success(userService.findAll(pageable));
-    }
-
-
-
-
-    @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
-    @ApiOperation(value = "返回状态", httpMethod = "POST", response = Status.class, notes = "返回状态")
-    public Status addUser(@ApiParam(required = true, name = "userSaveVo", value = "用户添加vo")
-                              @Valid @RequestBody User user, BindingResult errors){
-
-        //添加用户
-
-        return Status.success();
-
-    }
 }
