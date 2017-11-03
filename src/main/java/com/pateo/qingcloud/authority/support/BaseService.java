@@ -41,6 +41,5 @@ public interface BaseService<T, ID extends Serializable> {
 
     void delete(T entity);
 
-
     List<T> findList(Specification<T> spec, Sort sort);
 }

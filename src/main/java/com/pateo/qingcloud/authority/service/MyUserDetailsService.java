@@ -24,7 +24,7 @@ public class MyUserDetailsService implements UserDetailsService {
         Account account=accountService.findUserByLoginName(loginName);
         //账户是否删除
         boolean isNotDel=account.getDelFlag().equals(0);
-        //账户是否过期
+        //账户是否也停用
         boolean isNotStop=!account.getStatus().equals(AccountStatus.DISABLE);
         //密码是否过期
         boolean isNotExpire=TimeUtils.UDateToLocalDate(account.getExpire_time()).isAfter(LocalDate.now());
