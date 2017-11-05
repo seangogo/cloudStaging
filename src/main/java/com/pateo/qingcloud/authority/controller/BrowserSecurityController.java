@@ -5,9 +5,11 @@ package com.pateo.qingcloud.authority.controller;
 
 
 import com.pateo.qingcloud.authority.config.security.properties.SecurityConstants;
+import com.pateo.qingcloud.authority.config.security.properties.SecurityProperties;
 import com.pateo.qingcloud.authority.vo.result.SimpleResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -33,12 +35,18 @@ import java.io.IOException;
 @Slf4j
 public class BrowserSecurityController {
 
+	/**
+	 * 请求的缓存
+	 */
 	private RequestCache requestCache = new HttpSessionRequestCache();
 
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-	@Value("{pateo.security.browser.signInPage}")
+	@Value("${pateo.security.browser.signInPage}")
 	private String signInPage;
+
+	@Autowired
+	private SecurityProperties securityProperties;
 
 
 	/**
@@ -55,7 +63,7 @@ public class BrowserSecurityController {
 			throws IOException {
 
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
-
+		log.info(securityProperties.toString());
 		if (savedRequest != null) {
 			String targetUrl = savedRequest.getRedirectUrl();
 			log.info("引发跳转的请求是:" + targetUrl);

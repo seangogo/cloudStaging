@@ -51,6 +51,13 @@ public class Account extends BaseEntity<String> implements UserDetails {
     private Set<String> urls = new HashSet<>();
 
     /**
+     * 用户有权访问的所有projectId，不持久化到数据库
+     */
+    @Transient
+    private Set<Long> projectIds = new HashSet<>();
+
+
+    /**
      * 用户有权的所有资源id，不持久化到数据库
      */
     @Transient
@@ -207,6 +214,26 @@ public class Account extends BaseEntity<String> implements UserDetails {
         this.urls = urls;
     }
 
+
+
+    /**
+     * @return the projectIds
+     */
+    public Set<Long> getProjectIds() {
+        init(projectIds);
+        forEachRoles(role -> projectIds.add(role.getProjectId()));
+        return projectIds;
+    }
+
+
+    /**
+     * @param projectIds
+     *            the urls to set
+     */
+    public void setProjectIds(Set<Long> projectIds) {
+        this.urls = urls;
+    }
+
     /**
      * @param data
      */
@@ -229,5 +256,13 @@ public class Account extends BaseEntity<String> implements UserDetails {
         }
     }
 
+    /**
+     * @param consumer
+     */
+    private void forEachRoles(Consumer<Role> consumer) {
+        for (RoleAccount roleAccount : roles) {
+            consumer.accept(roleAccount.getRole());
+        }
+    }
 
 }

@@ -59,5 +59,10 @@ public class User extends BaseEntity<String>{
      */
     private String organizeId;
 
+    /**
+     * 项目ID
+     */
+    private Long projectId;
+
 
 }

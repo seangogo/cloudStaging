@@ -5,11 +5,12 @@ package com.pateo.qingcloud.authority.config.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pateo.qingcloud.authority.config.security.properties.LoginResponseType;
+import com.pateo.qingcloud.authority.config.security.properties.SecurityProperties;
+import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.vo.result.SimpleResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -34,8 +35,10 @@ public class PateoAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	@Value("{pateo.security.browser.singInSuccessUrl}")
-	private String getSingInSuccessUrl;
+
+	@Autowired
+	private SecurityProperties securityProperties;
+
 	private RequestCache requestCache = new HttpSessionRequestCache();
 
 	@Override
@@ -43,17 +46,19 @@ public class PateoAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
                                         Authentication authentication) throws IOException, ServletException {
 
 		log.info("登录成功");
-		if (LoginResponseType.JSON.equals(getSingInSuccessUrl)) {
+		if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getSignInResponseType())) {
 			response.setContentType("application/json;charset=UTF-8");
 			String type = authentication.getClass().getSimpleName();
+			Account account=(Account)authentication.getPrincipal();
 			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(type)));
 		} else {
 			// 如果设置了imooc.security.browser.singInSuccessUrl，总是跳到设置的地址上
 			// 如果没设置，则尝试跳转到登录之前访问的地址上，如果登录前访问地址为空，则跳到网站根路径上
-			if (StringUtils.isNotBlank(getSingInSuccessUrl)) {
+			if (StringUtils.isNotBlank(securityProperties.getBrowser().getSingInSuccessUrl())) {
 				requestCache.removeRequest(request, response);
 				setAlwaysUseDefaultTargetUrl(true);
-				setDefaultTargetUrl(getSingInSuccessUrl);
+
+				setDefaultTargetUrl(securityProperties.getBrowser().getSingInSuccessUrl());
 			}
 			super.onAuthenticationSuccess(request, response, authentication);
 		}

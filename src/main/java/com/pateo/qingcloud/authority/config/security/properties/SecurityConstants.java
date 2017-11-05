@@ -13,10 +13,10 @@ public interface SecurityConstants {
 	 * 默认的处理验证码的url前缀
 	 */
 	String DEFAULT_VALIDATE_CODE_URL_PREFIX = "/code";
+
 	/**
 	 * 当请求需要身份认证时，默认跳转的url
-	 * 
-	 * @see SecurityController
+	 *
 	 */
 	String DEFAULT_UNAUTHENTICATION_URL = "/authentication/require";
 	/**

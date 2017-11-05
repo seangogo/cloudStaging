@@ -4,13 +4,17 @@
 package com.pateo.qingcloud.authority.config.security;
 
 import com.pateo.qingcloud.authority.config.security.authentication.FormAuthenticationConfig;
+import com.pateo.qingcloud.authority.config.security.properties.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -36,21 +40,32 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private FormAuthenticationConfig formAuthenticationConfig;
 
+	@Autowired
+	protected AuthenticationSuccessHandler pateoAuthenticationSuccessHandler;
+
+	@Autowired
+	protected AuthenticationFailureHandler pateoAuthenctiationFailureHandler;
 
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		 http.formLogin()
-				 .loginPage("/signIn.html")
-				 .loginProcessingUrl("/authentication/form")
+		 http .formLogin()
+				 .loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
+				 .loginProcessingUrl(SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM)
+				 .failureUrl("/error/403.html")
+				 .successHandler(pateoAuthenticationSuccessHandler)
+				 .failureHandler(pateoAuthenctiationFailureHandler)
 				 .and()
 				 .authorizeRequests()
-				 .antMatchers("/signIn.html").permitAll()
-				 .antMatchers("/swagger-ui.html").permitAll()
+				 .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+						 "/signIn.html","/swagger-ui.html","/error/403.html","logout").permitAll()
+				 .antMatchers(HttpMethod.GET,
+						 "/**/*.html",
+						 "/admin/me",
+						 "/resource").authenticated()
 				 .anyRequest()
-				 .authenticated()
+				 .access("@rbacService.hasPermission(request, authentication)")
 		         .and().csrf().disable();
-		
 	}
 
 
