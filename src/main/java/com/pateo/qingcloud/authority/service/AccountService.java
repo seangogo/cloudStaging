@@ -1,6 +1,6 @@
 package com.pateo.qingcloud.authority.service;
 
-import com.pateo.qingcloud.authority.domain.Account;
+import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.repositry.AccountRepositry;
 import com.pateo.qingcloud.authority.support.BaseRepository;
 import com.pateo.qingcloud.authority.support.BaseServiceImpl;
@@ -19,7 +19,7 @@ public class AccountService extends BaseServiceImpl<Account,String> {
         return this.accountRepositry;
     }
 
-    public Account findUserByLoginName(String loginName){
-        return  accountRepositry.findByLoginName(loginName);
+    public Account findUserByLoginName(String userName){
+        return  accountRepositry.findByUserName(userName);
     }
 }

@@ -30,10 +30,8 @@ public abstract class BaseEntity<U> implements Serializable {
      * 主键ID自动生成策略
      */
     @Id
-    @GenericGenerator(name = "id", strategy = "uuid2")
-    @GeneratedValue(generator = "id")
-    @Column(name = "id", unique = true, length = 36)
-    protected String id;
+    @GeneratedValue
+    private Long id;
 
 
     /**

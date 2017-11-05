@@ -1,38 +1,40 @@
 package com.pateo.qingcloud.authority.vo.input;
 
+import com.pateo.qingcloud.authority.menu.Sex;
+import com.pateo.qingcloud.authority.utils.validater.Phone;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.validator.constraints.Email;
 
-import java.util.List;
-
-@ApiModel(value = "用户添加输入VO")
+@ApiModel( "用户添加输入VO")
+@Setter
+@Getter
+@ToString
 public class UserSaveVo {
 
-	@ApiModelProperty(value = "用户Vo")
-	private UserVo userVo;
-	
-	@ApiModelProperty(value = "角色列表")
-	private List<RoleVo> roleList;
+	@ApiModelProperty( " 用户姓名 ")
+	private String userName;
 
-	public UserVo getUserVo() {
-		return userVo;
-	}
+	@ApiModelProperty( " 性别 ")
+	private Sex sex;
 
-	public void setUserVo(UserVo userVo) {
-		this.userVo = userVo;
-	}
+	@ApiModelProperty( "手机号 ")
+	@Phone
+	private String phone;
 
-	public List<RoleVo> getRoleList() {
-		return roleList;
-	}
+	@ApiModelProperty( " 邮箱 ")
+	@Email
+	private String email;
 
-	public void setRoleList(List<RoleVo> roleList) {
-		this.roleList = roleList;
-	}
+	@ApiModelProperty( "  头像url ")
+	private String imgUrl;
 
-	public UserSaveVo() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
+	@ApiModelProperty(" 账户 ")
+	private String loginName;
+
+	@ApiModelProperty("密码")
+	private String password;
 }

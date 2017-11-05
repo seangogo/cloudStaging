@@ -1,7 +1,7 @@
 package com.pateo.qingcloud.authority.controller;
 
-import com.pateo.qingcloud.authority.domain.User;
 import com.pateo.qingcloud.authority.service.UserService;
+import com.pateo.qingcloud.authority.vo.input.UserSaveVo;
 import com.pateo.qingcloud.authority.vo.result.Status;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,22 +24,6 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     private UserService userService;
-
-    /**
-     *
-     * @param userSaveVo
-     * @return
-     */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @ApiOperation(value = "返回状态", httpMethod = "POST", response = Status.class, notes = "返回状态")
-    public Status addUser1(@ApiParam(required = true, name = "userSaveVo", value = "用户添加vo")
-                              @RequestBody User userSaveVo) {
-        //添加用户
-        userService.save(userSaveVo);
-
-        return Status.success();
-
-    }
 
 
     @GetMapping(value = "/login")
@@ -64,12 +48,12 @@ public class UserController {
 
 
 
-    @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "返回状态", httpMethod = "POST", response = Status.class, notes = "返回状态")
-    public Status addUser(@ApiParam(required = true, name = "userSaveVo", value = "用户添加vo")
-                              @Valid @RequestBody User user, BindingResult errors){
+    public Status addUser(@ApiParam(required = true, name = "userSaveVo", value = "添加用户")
+                              @Valid @RequestBody UserSaveVo userSaveVo, BindingResult errors){
 
-        //添加用户
+        log.info("前端参数:{}",userSaveVo.toString());
 
         return Status.success();
 

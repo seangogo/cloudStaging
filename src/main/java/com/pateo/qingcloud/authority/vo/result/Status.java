@@ -1,5 +1,6 @@
 package com.pateo.qingcloud.authority.vo.result;
 
+import com.pateo.qingcloud.authority.menu.ResultEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

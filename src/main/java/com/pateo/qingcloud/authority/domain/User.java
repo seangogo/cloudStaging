@@ -1,16 +1,13 @@
 package com.pateo.qingcloud.authority.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pateo.qingcloud.authority.menu.Sex;
 import com.pateo.qingcloud.authority.support.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  *
@@ -26,7 +23,7 @@ public class User extends BaseEntity<String>{
     /**
      * 用户姓名
      */
-    private String userName;
+    private String realName;
 
 
     /**
@@ -62,13 +59,5 @@ public class User extends BaseEntity<String>{
      */
     private String organizeId;
 
-
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JoinTable(name = "opt_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    @JsonIgnoreProperties("users")
-    private Set<Role> roles = new HashSet();
 
 }

@@ -30,16 +30,16 @@ public class ValidAspect {
 			if (arg instanceof BindingResult){
 				BindingResult errors=(BindingResult)arg;
 				if (errors.hasErrors()){
-					throw new ValidateException(errors.getAllErrors());
+					throw new ValidateException(errors.getFieldError().getCode(),errors.getFieldError().getDefaultMessage());
 				};
 			}
 		}
 		
-		long start = new Date().getTime();
+		long start = (new Date()).getTime();
 		
 		Object object = pjp.proceed();
 		
-		System.out.println("time aspect 耗时:"+ (new Date().getTime() - start));
+		System.out.println("time aspect 耗时:"+ (((new Date()).getTime()) - start));
 		
 		System.out.println("time aspect end");
 		

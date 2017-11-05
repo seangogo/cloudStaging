@@ -4,6 +4,7 @@
 package com.pateo.qingcloud.authority.support;
 
 import com.pateo.qingcloud.authority.exception.UserNotExistException;
+import com.pateo.qingcloud.authority.exception.ValidateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,16 @@ public class ControllerExceptionHandler {
 		Map<String, Object> result = new HashMap<>();
 		result.put("id", ex.getId());
 		result.put("message", ex.getMessage());
+		return result;
+	}
+
+	@ExceptionHandler(ValidateException.class)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+	public Map<String, Object> ValidException(ValidateException ex) {
+		Map<String, Object> result = new HashMap<>();
+		result.put("code", "422");
+		result.put("message",ex.getMessage() );
 		return result;
 	}
 
