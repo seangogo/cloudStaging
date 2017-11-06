@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "optNotice")
 @Getter
 @Setter
-public class Notice  extends BaseEntity<Long>{
+public class Notice  extends BaseEntity<String>{
     /**
      * 公告标题
      */

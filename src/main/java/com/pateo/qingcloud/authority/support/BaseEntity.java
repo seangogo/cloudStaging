@@ -47,7 +47,7 @@ public abstract class BaseEntity<U> implements Serializable {
      * 修改人 登录的帐号
      */
     @LastModifiedBy
-    @Column(name = "update_by")
+    @Column(name = "update_by",length = 36)
     protected U updateBy;
 
     /**
@@ -55,7 +55,7 @@ public abstract class BaseEntity<U> implements Serializable {
      */
     @CreatedDate
     @Temporal(TIMESTAMP)
-    @Column(name = "create_date",updatable = false)
+    @Column(name = "create_date",updatable = false,length = 36)
     protected Date createdDate;
     /**
      * 修改时间

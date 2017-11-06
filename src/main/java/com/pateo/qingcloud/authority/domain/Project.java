@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "opt_project")
-public class Project extends BaseEntity<Long>{
+public class Project extends BaseEntity<String>{
     /**
      * 项目标题
      */

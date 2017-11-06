@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name = "opt_brand")
 @Getter
 @Setter
-public class Brand extends BaseEntity<Long>{
+public class Brand extends BaseEntity<String>{
     /**
      * 品牌名称
      */

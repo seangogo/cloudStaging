@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Email;
 public class UserSaveVo {
 
 	@ApiModelProperty( " 用户姓名 ")
-	private String userName;
+	private String realName;
 
 	@ApiModelProperty( " 性别 ")
 	private Sex sex;
@@ -33,7 +33,7 @@ public class UserSaveVo {
 	private String imgUrl;
 
 	@ApiModelProperty(" 账户 ")
-	private String loginName;
+	private String UserName;
 
 	@ApiModelProperty("密码")
 	private String password;

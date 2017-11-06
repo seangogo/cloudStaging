@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,10 +56,11 @@ public class UserController {
     @PostMapping(value = "/save")
     @ApiOperation(value = "返回状态", httpMethod = "POST", response = Status.class, notes = "返回状态")
     public Status addUser(@ApiParam(required = true, name = "userSaveVo", value = "添加用户")
-                              @Valid @RequestBody UserSaveVo userSaveVo, BindingResult errors){
+                              @Valid @RequestBody UserSaveVo userSaveVo, BindingResult errors,
+                          @AuthenticationPrincipal Account account){
 
         log.info("前端参数:{}",userSaveVo.toString());
-
+        userService.addUser(userSaveVo,account.getProjectIds());
         return Status.success();
 
     }

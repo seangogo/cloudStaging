@@ -30,7 +30,7 @@ public class RbacService {
 
 		if (principal instanceof Account) {
 			//如果用户名是admin，就永远返回true
-			if (StringUtils.equals(((Account) principal).getUsername(), "admin1")) {
+			if (StringUtils.equals(((Account) principal).getUsername(), "admin")) {
 				hasPermission = true;
 			} else {
 				// 读取用户所拥有权限的所有URL

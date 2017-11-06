@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @ToString
-public class User extends BaseEntity<Long>{
+public class User extends BaseEntity<String>{
 
     /**
      * 用户姓名
@@ -64,7 +64,7 @@ public class User extends BaseEntity<Long>{
     /**
      * 项目ID
      */
-    private Long projectId;
+    private String projectId;
 
 
 
