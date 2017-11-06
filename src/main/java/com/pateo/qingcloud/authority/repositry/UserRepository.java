@@ -7,5 +7,5 @@ import com.pateo.qingcloud.authority.support.BaseRepository;
  * @author sean
  * 2017/11/2.
  */
-public interface UserRepository extends BaseRepository<User,Long> {
+public interface UserRepository extends BaseRepository<User,String> {
 }

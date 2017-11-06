@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class UserService extends BaseServiceImpl<User,Long>{
+public class UserService extends BaseServiceImpl<User,String>{
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public BaseRepository<User, Long> getBaseDao() {
+    public BaseRepository<User, String> getBaseDao() {
         return this.userRepository;
     }
 

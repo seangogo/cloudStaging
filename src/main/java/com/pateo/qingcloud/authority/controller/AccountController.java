@@ -73,8 +73,8 @@ public class AccountController {
     @ApiOperation(value = "删除账号(逻辑删除)", httpMethod = "POST",
             response = Status.class, notes = "连带删除关联的角色（物理删除)")
     public void delete(@ApiParam(hidden = true)@AuthenticationPrincipal Account account
-            ,@ApiParam(required = true, name = "id", value = "账户ID")@RequestParam Long id) {
-        Set<Long> projectIds=account.getProjectIds();
+            ,@ApiParam(required = true, name = "id", value = "账户ID")@RequestParam String id) {
+        Set<String> projectIds=account.getProjectIds();
         accountService.deleteAccount(id,projectIds);
     }
 
@@ -85,8 +85,8 @@ public class AccountController {
      */
     @GetMapping("/{id}")
     public AccountOut getInfo(@ApiParam(hidden = true)@AuthenticationPrincipal Account account
-                              ,@PathVariable Long id) {
-        Set<Long> projectIds=account.getProjectIds();
+                              ,@PathVariable String id) {
+        Set<String> projectIds=account.getProjectIds();
         return accountService.getInfo(id,projectIds);
     }
 

@@ -27,7 +27,7 @@ import java.util.Set;
 @SuppressWarnings("ALL")
 @Service
 @Transactional(readOnly = true)
-public class AccountService extends BaseServiceImpl<Account,Long> {
+public class AccountService extends BaseServiceImpl<Account,String> {
     @Autowired
     private AccountRepository accountRepository;
 
@@ -41,7 +41,7 @@ public class AccountService extends BaseServiceImpl<Account,Long> {
     private RoleRepository roleRepository;
 
     @Override
-    public BaseRepository<Account, Long> getBaseDao() {
+    public BaseRepository<Account, String> getBaseDao() {
         return this.accountRepository;
     }
 
@@ -93,7 +93,7 @@ public class AccountService extends BaseServiceImpl<Account,Long> {
      * @param projectIds 可以操作的项目Id集合
      */
     @Transactional(rollbackFor = Exception.class)
-    public void deleteAccount(Long id, Set<Long> projectIds) throws AccessDeniedException {
+    public void deleteAccount(String id, Set<String> projectIds) throws AccessDeniedException {
         if (!projectIds.contains(find(id).getUser().getProjectId())){
             throw  new AccessDeniedException("权限不足");
         }
@@ -106,7 +106,7 @@ public class AccountService extends BaseServiceImpl<Account,Long> {
      * @param projectIds 可以操作的项目Id集合
      * @return
      */
-    public AccountOut getInfo(Long id, Set<Long> projectIds) {
+    public AccountOut getInfo(String id, Set<String> projectIds) {
         if (!projectIds.contains(find(id).getUser().getProjectId())){
             throw  new AccessDeniedException("权限不足");
         }

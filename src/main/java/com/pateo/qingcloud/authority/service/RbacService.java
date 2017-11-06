@@ -36,7 +36,7 @@ public class RbacService {
 				// 读取用户所拥有权限的所有URL
 				Account account=(Account) principal;
 				Set<String> urls = account.getUrls();
-				Set<Long> projectId=account.getProjectIds();
+				Set<String> projectId=account.getProjectIds();
 				log.info("项目ID:{}",projectId);
 				for (String url : urls) {
 					if (antPathMatcher.match(url, request.getRequestURI())) {

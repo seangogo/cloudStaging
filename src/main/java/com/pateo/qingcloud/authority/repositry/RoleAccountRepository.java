@@ -11,10 +11,10 @@ import javax.transaction.Transactional;
 /**
  * @author seangogo
  */
-public interface RoleAccountRepository extends BaseRepository<RoleAccount,Long> {
+public interface RoleAccountRepository extends BaseRepository<RoleAccount,String> {
 
     @Modifying
     @Transactional
     @Query(value = "DELETE  from RoleAccount a where a.account.id=?1")
-    int deleteforAccountId(Long id);
+    int deleteforAccountId(String id);
 }

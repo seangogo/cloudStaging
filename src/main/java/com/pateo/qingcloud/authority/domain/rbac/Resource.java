@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "opt_resource")
 @Getter
 @Setter
-public class Resource extends BaseEntity<Long> {
+public class Resource extends BaseEntity<String> {
 
     /**
      * 资源名称 如xx菜单，xx按钮
@@ -76,7 +76,7 @@ public class Resource extends BaseEntity<Long> {
     public ResourceInfo toTree(Account account) {
         ResourceInfo result = new ResourceInfo();
         BeanUtils.copyProperties(this, result);
-        Set<Long> resourceIds = account.getAllResourceIds();
+        Set<String> resourceIds = account.getAllResourceIds();
 
         List<ResourceInfo> children = new ArrayList();
         for (Resource child : getChilds()) {

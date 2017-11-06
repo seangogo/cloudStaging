@@ -34,7 +34,7 @@ public class ResourceService {
      * @date
      * @since 1.0.0
      */
-    public ResourceInfo getTree(Long accountId){
+    public ResourceInfo getTree(String accountId){
         Account account = accountRepository.findOne(accountId);
         return resourceRepository.findByName("根节点").toTree(account);
     }
@@ -101,7 +101,7 @@ public class ResourceService {
      * @param id
      * @param up
      */
-    public Long move(Long id, boolean up){
+    public String move(Long id, boolean up){
         Resource resource = resourceRepository.findOne(id);
         int index = resource.getSort();
         List<Resource> childs = resource.getParent().getChilds();

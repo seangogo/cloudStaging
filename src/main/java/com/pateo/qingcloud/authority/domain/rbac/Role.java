@@ -16,7 +16,7 @@ import java.util.Set;
 @Table(name = "opt_role")
 @Getter
 @Setter
-public class Role extends BaseEntity<Long>{
+public class Role extends BaseEntity<String>{
     /**
      * 角色名称
      */
@@ -34,7 +34,7 @@ public class Role extends BaseEntity<Long>{
     /**
      * 项目主键
      */
-    private Long   projectId;
+    private String projectId;
 
 
     /**

@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  */
 @Entity
 @Table(name = "opt_account")
-public class Account extends BaseEntity<Long> implements UserDetails {
+public class Account extends BaseEntity<String> implements UserDetails {
     /**
      * 用户名
      */
@@ -54,14 +54,14 @@ public class Account extends BaseEntity<Long> implements UserDetails {
      * 用户有权访问的所有projectId，不持久化到数据库
      */
     @Transient
-    private Set<Long> projectIds = new HashSet<>();
+    private Set<String> projectIds = new HashSet<>();
 
 
     /**
      * 用户有权的所有资源id，不持久化到数据库
      */
     @Transient
-    private Set<Long> resourceIds = new HashSet<>();
+    private Set<String> resourceIds = new HashSet<>();
 
     /**
      *  账户状态
@@ -124,7 +124,7 @@ public class Account extends BaseEntity<Long> implements UserDetails {
     /**
      * @return
      */
-    public Set<Long> getAllResourceIds() {
+    public Set<String> getAllResourceIds() {
         init(resourceIds);
         forEachResource(resource -> resourceIds.add(resource.getId()));
         return resourceIds;
@@ -227,7 +227,7 @@ public class Account extends BaseEntity<Long> implements UserDetails {
     /**
      * @return the projectIds
      */
-    public Set<Long> getProjectIds() {
+    public Set<String> getProjectIds() {
         init(projectIds);
         forEachRoles(role -> projectIds.add(role.getProjectId()));
         return projectIds;

@@ -6,5 +6,5 @@ import com.pateo.qingcloud.authority.support.BaseRepository;
 /**
  * Created by sean on 2017/11/6.
  */
-public interface RoleRepository extends BaseRepository<Role,Long> {
+public interface RoleRepository extends BaseRepository<Role,String> {
 }

@@ -8,7 +8,7 @@ import com.pateo.qingcloud.authority.support.BaseRepository;
  * @author sean
  * @date 2017/11/6
  */
-public interface ResourceRepository extends BaseRepository<Resource,Long> {
+public interface ResourceRepository extends BaseRepository<Resource,String> {
     /**
      * 通过资源名称查找资源
      * @param name 资源名称

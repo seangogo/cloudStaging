@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 public class RoleInfo {
 	@ApiModelProperty("id")
-	private Long id;
+	private String id;
 
 	@ApiModelProperty("角色名称")
 	private String name;

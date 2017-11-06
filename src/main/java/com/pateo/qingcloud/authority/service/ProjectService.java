@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
  * 2017/11/3.
  */
 @Service
-public class ProjectService extends BaseServiceImpl<Project,Long> {
+public class ProjectService extends BaseServiceImpl<Project,String> {
     @Autowired
     private ProjectRepository projectRepository;
 
     @Override
-    public BaseRepository<Project, Long> getBaseDao() {
+    public BaseRepository<Project, String> getBaseDao() {
         return this.projectRepository;
     }
 

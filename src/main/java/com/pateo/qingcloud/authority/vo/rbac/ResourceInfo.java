@@ -24,7 +24,7 @@ public class ResourceInfo {
 	 *
 	 * @since 1.0.0
 	 */
-	private Long id;
+	private String id;
 	/**
 	 *  父资源
 	 */

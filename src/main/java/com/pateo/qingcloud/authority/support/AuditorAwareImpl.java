@@ -9,11 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * @author seangogo
  */
-public class AuditorAwareImpl implements AuditorAware<Long> {
+public class AuditorAwareImpl implements AuditorAware<String> {
     @Value("${app.version}")
     private String version;
     @Override
-    public Long getCurrentAuditor() {
+    public String getCurrentAuditor() {
         return ((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 }

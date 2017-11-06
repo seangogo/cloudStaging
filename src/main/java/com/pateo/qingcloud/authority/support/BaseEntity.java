@@ -21,7 +21,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  * @param <U> 用户ID
  */
 @MappedSuperclass
-@EqualsAndHashCode(exclude = "sid")
+@EqualsAndHashCode(exclude = "id")
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity<U> implements Serializable {
@@ -30,8 +30,10 @@ public abstract class BaseEntity<U> implements Serializable {
      * 主键ID自动生成策略
      */
     @Id
-    @GeneratedValue
-    private Long id;
+    @GenericGenerator(name = "id", strategy = "uuid2")
+    @GeneratedValue(generator = "id")
+    @Column(name = "id", length = 36)
+    protected String id;
 
 
     /**

@@ -24,7 +24,7 @@ public class AccountVo {
      */
     @ApiModelProperty(value = "账户ID",position = 0)
     @Min(value = 1,message = "账户id不能小于1")
-    private Long id;
+    private String id;
 
     /**
      * 用户名
