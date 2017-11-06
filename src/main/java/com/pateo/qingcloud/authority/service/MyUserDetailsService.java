@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 
 /**
- * Created by sean on 2017/11/2.
+ *
+ * @author sean
+ * @date 2017/11/2
  */
 @Component
 @Slf4j
@@ -28,6 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
         Account account=accountService.findUserByLoginName(loginName);
 
         Set<String> urls=account.getUrls();
+        log.info("userinfo:{}",account.getUser().toString());
         for (String s:urls){
             log.info("url:{}",s);
         }

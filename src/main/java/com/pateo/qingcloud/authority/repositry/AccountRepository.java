@@ -8,7 +8,7 @@ import com.pateo.qingcloud.authority.support.BaseRepository;
  * @author sean
  * @date 2017/11/2
  */
-public interface AccountRepository extends BaseRepository<Account,String> {
+public interface AccountRepository extends BaseRepository<Account,Long> {
     /**
      * 通过用户名查找账户信息
      * @param userName 账户名称

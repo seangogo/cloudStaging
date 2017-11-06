@@ -45,7 +45,7 @@ public class Account extends BaseEntity<Long> implements UserDetails {
 
 
     /**
-     * 用户有权访问的所有url，不持久化到数据库
+     * 用户有权访问的url下的所有(projectId)，不持久化到数据库
      */
     @Transient
     private Set<String> urls = new HashSet<>();
@@ -185,7 +185,7 @@ public class Account extends BaseEntity<Long> implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return this.getDelFlag().equals(0);
+        return this.getDelFlag().equals(0)&&this.getUser()!=null;
     }
 
     /**

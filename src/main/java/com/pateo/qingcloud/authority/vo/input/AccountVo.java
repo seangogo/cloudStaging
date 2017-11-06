@@ -20,6 +20,13 @@ import javax.validation.constraints.Pattern;
 @ToString
 public class AccountVo {
     /**
+     * id
+     */
+    @ApiModelProperty(value = "账户ID",position = 0)
+    @Min(value = 1,message = "账户id不能小于1")
+    private Long id;
+
+    /**
      * 用户名
      */
     @ApiModelProperty(value = "用户名:6-16字符",position = 1)

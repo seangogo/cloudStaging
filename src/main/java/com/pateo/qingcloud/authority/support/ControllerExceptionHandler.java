@@ -6,6 +6,7 @@ package com.pateo.qingcloud.authority.support;
 import com.pateo.qingcloud.authority.exception.UserNotExistException;
 import com.pateo.qingcloud.authority.exception.ValidateException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +38,16 @@ public class ControllerExceptionHandler {
 	public Map<String, Object> ValidException(ValidateException ex) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("code", "422");
+		result.put("message",ex.getMessage() );
+		return result;
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public Map<String, Object> AccessDeniedException(ValidateException ex) {
+		Map<String, Object> result = new HashMap(2);
+		result.put("code", HttpStatus.FORBIDDEN);
 		result.put("message",ex.getMessage() );
 		return result;
 	}
