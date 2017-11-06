@@ -6,6 +6,6 @@ import com.pateo.qingcloud.authority.support.BaseRepository;
 /**
  * Created by sean on 2017/11/2.
  */
-public interface AccountRepositry extends BaseRepository<Account,String> {
+public interface AccountRepository extends BaseRepository<Account,String> {
     Account findByUserName(String loginame);
 }

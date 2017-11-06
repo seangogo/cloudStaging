@@ -37,7 +37,7 @@ public class RbacService {
 				Account account=(Account) principal;
 				Set<String> urls = account.getUrls();
 				Set<Long> projectId=account.getProjectIds();
-				log.info("项目ID:",projectId);
+				log.info("项目ID:{}",projectId);
 				for (String url : urls) {
 					if (antPathMatcher.match(url, request.getRequestURI())) {
 						hasPermission = true;

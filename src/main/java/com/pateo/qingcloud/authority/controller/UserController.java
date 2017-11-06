@@ -52,7 +52,7 @@ public class UserController {
 
 
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @PostMapping(value = "/save")
     @ApiOperation(value = "返回状态", httpMethod = "POST", response = Status.class, notes = "返回状态")
     public Status addUser(@ApiParam(required = true, name = "userSaveVo", value = "添加用户")
                               @Valid @RequestBody UserSaveVo userSaveVo, BindingResult errors){

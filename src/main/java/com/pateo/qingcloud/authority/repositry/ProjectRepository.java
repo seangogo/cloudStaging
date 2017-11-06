@@ -7,6 +7,6 @@ import com.pateo.qingcloud.authority.support.BaseRepository;
  * @author sean
  * 2017/11/3.
  */
-public interface ProjectRepositry extends BaseRepository<Project,String>{
+public interface ProjectRepository extends BaseRepository<Project,String>{
 
 }

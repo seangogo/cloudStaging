@@ -2,7 +2,7 @@ package com.pateo.qingcloud.authority.domain.rbac;
 
 import com.pateo.qingcloud.authority.menu.ResourceType;
 import com.pateo.qingcloud.authority.support.BaseEntity;
-import com.pateo.qingcloud.authority.vo.ResourceInfo;
+import com.pateo.qingcloud.authority.vo.rbac.ResourceInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -100,5 +100,8 @@ public class Resource extends BaseEntity<String> {
     @Column(name = "remark", length = 1000)
     private String remark;
 
-
+    public void addChild(Resource child) {
+        childs.add(child);
+        child.setParent(this);
+    }
 }

@@ -107,6 +107,14 @@ public class Account extends BaseEntity<String> implements UserDetails {
     @Setter
     private User user;
 
+    /**
+     * olderPasswords
+     * 用户修改过的密码集合
+     */
+    @ElementCollection
+    @Getter
+    @Setter
+    private Set<String> oldPasswords;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

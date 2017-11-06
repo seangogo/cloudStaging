@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Set;
 
 /**
  *
@@ -63,6 +65,8 @@ public class User extends BaseEntity<String>{
      * 项目ID
      */
     private Long projectId;
+
+
 
 
 }

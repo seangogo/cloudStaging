@@ -1,7 +1,7 @@
 package com.pateo.qingcloud.authority.service;
 
 import com.pateo.qingcloud.authority.domain.Project;
-import com.pateo.qingcloud.authority.repositry.ProjectRepositry;
+import com.pateo.qingcloud.authority.repositry.ProjectRepository;
 import com.pateo.qingcloud.authority.support.BaseRepository;
 import com.pateo.qingcloud.authority.support.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectService extends BaseServiceImpl<Project,String> {
     @Autowired
-    private ProjectRepositry projectRepositry;
+    private ProjectRepository projectRepository;
 
     @Override
     public BaseRepository<Project, String> getBaseDao() {
-        return this.projectRepositry;
+        return this.projectRepository;
     }
 
 

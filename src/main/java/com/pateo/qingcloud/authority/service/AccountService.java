@@ -1,7 +1,7 @@
 package com.pateo.qingcloud.authority.service;
 
 import com.pateo.qingcloud.authority.domain.rbac.Account;
-import com.pateo.qingcloud.authority.repositry.AccountRepositry;
+import com.pateo.qingcloud.authority.repositry.AccountRepository;
 import com.pateo.qingcloud.authority.support.BaseRepository;
 import com.pateo.qingcloud.authority.support.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService extends BaseServiceImpl<Account,String> {
     @Autowired
-    private AccountRepositry accountRepositry;
+    private AccountRepository accountRepository;
     @Override
     public BaseRepository<Account, String> getBaseDao() {
-        return this.accountRepositry;
+        return this.accountRepository;
     }
 
     public Account findUserByLoginName(String userName){
-        return  accountRepositry.findByUserName(userName);
+        return  accountRepository.findByUserName(userName);
     }
 }
