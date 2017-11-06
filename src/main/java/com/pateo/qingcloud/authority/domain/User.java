@@ -6,10 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Set;
 
 /**
  *
@@ -20,7 +18,7 @@ import java.util.Set;
 @Table(name = "opt_user")
 @Getter
 @Setter
-public class User extends BaseEntity<String>{
+public class User extends BaseEntity<Long>{
 
     /**
      * 用户姓名

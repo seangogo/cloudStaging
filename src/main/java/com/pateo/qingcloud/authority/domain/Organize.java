@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "opt_Organize")
-public class Organize extends BaseEntity<String>{
+public class Organize extends BaseEntity<Long>{
     /**
      * 项目id
      */

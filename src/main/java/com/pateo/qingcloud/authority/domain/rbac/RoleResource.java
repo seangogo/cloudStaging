@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @Table(name = "opt_role_resource")
 @Getter
 @Setter
-public class RoleResource extends BaseEntity<String>{
+public class RoleResource extends BaseEntity<Long>{
 	/**
 	 * 角色
 	 */

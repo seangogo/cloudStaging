@@ -58,7 +58,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				 .and()
 				 .authorizeRequests()
 				 .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
-						 "/signIn.html","/swagger-ui.html","/error/403.html","logout").permitAll()
+						 "/signIn.html","/error/403.html","logout"
+						 ,"swagger-ui.html","/swagger-resources/**","/v2/**").permitAll()
 				 .antMatchers(HttpMethod.GET,
 						 "/**/*.html",
 						 "/admin/me",

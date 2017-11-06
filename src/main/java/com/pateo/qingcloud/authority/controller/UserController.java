@@ -40,7 +40,7 @@ public class UserController {
 
 
     @GetMapping(value = "/list")
-    @ApiOperation(value = "用户列表", httpMethod = "POST", response = Status.class, notes = "获取用户列表")
+    @ApiOperation(value = "用户列表", httpMethod = "GET", response = Status.class, notes = "获取用户列表")
     public Status getUserList(@PageableDefault Pageable pageable,Authentication authentication
             /*@ApiParam(name = "userListSearchVo", value = "用户列表查询条件")
             @RequestBody  userListSearchVo*/){

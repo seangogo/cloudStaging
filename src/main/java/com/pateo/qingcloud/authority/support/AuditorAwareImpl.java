@@ -1,21 +1,19 @@
 package com.pateo.qingcloud.authority.support;
 
-import lombok.extern.slf4j.Slf4j;
+import com.pateo.qingcloud.authority.domain.rbac.Account;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 /**
- * @author jh
+ * @author seangogo
  */
-@Slf4j
-public class AuditorAwareImpl implements AuditorAware<String> {
+public class AuditorAwareImpl implements AuditorAware<Long> {
     @Value("${app.version}")
     private String version;
     @Override
-    public String getCurrentAuditor() {
-        log.info("版本：{}",version);
-        return "10086";
-        // Can use Spring Security to return currently logged in user
-        // return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()
+    public Long getCurrentAuditor() {
+        return ((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 }

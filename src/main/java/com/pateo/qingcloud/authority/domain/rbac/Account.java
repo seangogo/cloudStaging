@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  */
 @Entity
 @Table(name = "opt_account")
-public class Account extends BaseEntity<String> implements UserDetails {
+public class Account extends BaseEntity<Long> implements UserDetails {
     /**
      * 用户名
      */
@@ -236,7 +236,7 @@ public class Account extends BaseEntity<String> implements UserDetails {
 
     /**
      * @param projectIds
-     *            the urls to set
+     * the urls to set
      */
     public void setProjectIds(Set<Long> projectIds) {
         this.urls = urls;

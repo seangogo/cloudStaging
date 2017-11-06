@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "opt_resource")
 @Getter
 @Setter
-public class Resource extends BaseEntity<String> {
+public class Resource extends BaseEntity<Long> {
 
     /**
      * 资源名称 如xx菜单，xx按钮
