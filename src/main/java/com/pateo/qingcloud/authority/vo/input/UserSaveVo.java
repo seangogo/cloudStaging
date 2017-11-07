@@ -9,32 +9,35 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 
+/**
+ * @author seangogo
+ */
 @ApiModel( "用户添加输入VO")
 @Setter
 @Getter
 @ToString
 public class UserSaveVo {
+	@ApiModelProperty("id")
+	private String id;
 
-	@ApiModelProperty( " 用户姓名 ")
+	@ApiModelProperty(" 用户姓名")
 	private String realName;
 
-	@ApiModelProperty( " 性别 ")
+	@ApiModelProperty("性别")
 	private Sex sex;
 
-	@ApiModelProperty( "手机号 ")
+	@ApiModelProperty("手机号")
 	@Phone
 	private String phone;
 
-	@ApiModelProperty( " 邮箱 ")
+	@ApiModelProperty("邮箱")
 	@Email
 	private String email;
 
-	@ApiModelProperty( "  头像url ")
+	@ApiModelProperty("头像url")
 	private String imgUrl;
 
-	@ApiModelProperty(" 账户 ")
-	private String UserName;
+	@ApiModelProperty("身份证号码")
+	private String idCard;
 
-	@ApiModelProperty("密码")
-	private String password;
 }

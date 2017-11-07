@@ -5,6 +5,7 @@ import com.pateo.qingcloud.authority.support.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @ToString
+@DynamicUpdate
 public class User extends BaseEntity<String>{
 
     /**
@@ -43,6 +45,11 @@ public class User extends BaseEntity<String>{
      */
     @Email
     private String email;
+
+    /**
+     * 身份证号码
+     */
+    private String idCard;
 
 
     /**

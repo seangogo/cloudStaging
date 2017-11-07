@@ -2,9 +2,13 @@ package com.pateo.qingcloud.authority.service;
 
 import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.domain.rbac.Resource;
+import com.pateo.qingcloud.authority.exception.DBException;
+import com.pateo.qingcloud.authority.menu.ResultEnum;
 import com.pateo.qingcloud.authority.repositry.AccountRepository;
 import com.pateo.qingcloud.authority.repositry.ResourceRepository;
+import com.pateo.qingcloud.authority.vo.input.ResourceVo;
 import com.pateo.qingcloud.authority.vo.rbac.ResourceInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,31 +51,41 @@ public class ResourceService {
      * @date  2015年7月10日下午7:01:48
      * @since 1.0.0
      */
-    public ResourceInfo getInfo(Long id){
+
+    public ResourceVo getInfo(String id)throws DBException{
+        if (!resourceRepository.exists(id)){
+            throw new DBException(ResultEnum.OBJ_NOT_EXIST);
+        }
         Resource resource = resourceRepository.findOne(id);
-        ResourceInfo resourceInfo = new ResourceInfo();
-        BeanUtils.copyProperties(resource, resourceInfo);
-        return resourceInfo;
+        ResourceVo resourceVo = new ResourceVo();
+        BeanUtils.copyProperties(resource, resourceVo);
+        return resourceVo;
     }
 
     /**
      * 新增资源
      *
-     * @param info 页面传入的资源信息
+     * @param vo 页面传入的资源信息
      * @return ResourceInfo 资源信息
-     * @date  2015年7月10日下午7:01:51
+     * @date  2017年11月07日下午7:01:51
      * @since 1.0.0
      */
-    public ResourceInfo create(ResourceInfo info){
-        Resource parent = resourceRepository.findOne(info.getParentId());
+    public void save(ResourceVo vo)throws DBException {
+        Resource resource=new Resource();
+        Resource parent = resourceRepository.findOne(vo.getParent());
         if(parent == null){
-            parent = resourceRepository.findByName("根节点");
+            throw new DBException(ResultEnum.PARENT_NOT_EXIST);
         }
-        Resource resource = new Resource();
-        BeanUtils.copyProperties(info, resource);
+        //修改
+        if (!StringUtils.isEmpty(vo.getId())){
+            resource=resourceRepository.findOne(vo.getId());
+            if (StringUtils.isEmpty(resource.getId())){
+                throw new DBException(ResultEnum.RESOURCE_NOT_EXIST);
+            }
+        }
+        BeanUtils.copyProperties(vo, resource);
         parent.addChild(resource);
-        info.setId(resourceRepository.save(resource).getId());
-        return info;
+        resourceRepository.save(resource);
     }
     /**
      * 更新资源
@@ -101,9 +115,9 @@ public class ResourceService {
      * @param id
      * @param up
      */
-    public String move(Long id, boolean up){
+    public String move(String id, boolean up){
         Resource resource = resourceRepository.findOne(id);
-        int index = resource.getSort();
+        long index = resource.getSort();
         List<Resource> childs = resource.getParent().getChilds();
         for (int i = 0; i < childs.size(); i++) {
             Resource current = childs.get(i);

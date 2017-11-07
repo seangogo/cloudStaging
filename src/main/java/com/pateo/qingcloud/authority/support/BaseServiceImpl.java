@@ -1,5 +1,6 @@
 package com.pateo.qingcloud.authority.support;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -111,6 +112,13 @@ public abstract class BaseServiceImpl<T extends BaseEntity, ID extends Serializa
         // TODO Auto-generated method stub
         return getBaseDao().findAll(spec, pageable);
     }
+
+    @Override
+    public Page<T> findAll(Example<T> example, Pageable pageable) {
+        // TODO Auto-generated method stub
+        return getBaseDao().findAll(example, pageable);
+    }
+
 
 
 }

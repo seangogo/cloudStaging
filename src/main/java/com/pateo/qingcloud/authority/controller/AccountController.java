@@ -6,7 +6,9 @@ import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.service.AccountService;
 import com.pateo.qingcloud.authority.vo.AccountOut;
 import com.pateo.qingcloud.authority.vo.input.AccountVo;
-import com.pateo.qingcloud.authority.vo.result.Status;
+import com.pateo.qingcloud.authority.vo.result.DataResult;
+import com.pateo.qingcloud.authority.vo.result.SimpleResponse;
+import com.pateo.qingcloud.authority.vo.result.StateResult;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -50,18 +52,18 @@ public class AccountController {
     }
 
     /**
-     * 新增账户
+     * 新增账户 必须关联角色 用户
      * @param accountVo
      * @param errors
      * @return
      */
     @PostMapping(value = "/save")
-    @ApiOperation(value = "新增账户", httpMethod = "POST", response = Status.class, notes = "返回状态")
-    public Status addAccount(@ApiParam(required = true, name = "accountVo", value = "账户模型")
+    @ApiOperation(value = "新增账户", httpMethod = "POST", response = DataResult.class, notes = "返回状态")
+    public SimpleResponse addAccount(@ApiParam(required = true, name = "accountVo", value = "账户模型")
                           @Valid @RequestBody AccountVo accountVo, BindingResult errors){
         log.info("前端参数:{}",accountVo.toString());
         accountService.create(accountVo);
-        return Status.success();
+        return new SimpleResponse(StateResult.success());
     }
 
 
@@ -71,7 +73,7 @@ public class AccountController {
      */
     @PostMapping("/delete")
     @ApiOperation(value = "删除账号(逻辑删除)", httpMethod = "POST",
-            response = Status.class, notes = "连带删除关联的角色（物理删除)")
+            response = DataResult.class, notes = "连带删除关联的角色（物理删除)")
     public void delete(@ApiParam(hidden = true)@AuthenticationPrincipal Account account
             ,@ApiParam(required = true, name = "id", value = "账户ID")@RequestParam String id) {
         Set<String> projectIds=account.getProjectIds();

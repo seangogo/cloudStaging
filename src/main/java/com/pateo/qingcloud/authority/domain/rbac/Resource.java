@@ -6,6 +6,7 @@ import com.pateo.qingcloud.authority.vo.rbac.ResourceInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ import java.util.Set;
 @Table(name = "opt_resource")
 @Getter
 @Setter
+@DynamicUpdate
 public class Resource extends BaseEntity<String> {
 
     /**
@@ -38,7 +40,6 @@ public class Resource extends BaseEntity<String> {
     /**
      * 资源类型
      */
-    @Enumerated(EnumType.STRING)
     private ResourceType type;
 
     /**
@@ -63,7 +64,7 @@ public class Resource extends BaseEntity<String> {
     /**
      * 序号
      */
-    private Integer sort;
+    private Long sort=System.currentTimeMillis();
 
     /**
      * 子资源

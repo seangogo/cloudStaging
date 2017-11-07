@@ -1,5 +1,6 @@
 package com.pateo.qingcloud.authority.support;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,8 @@ public interface BaseService<T, ID extends Serializable> {
     Page<T> findAll(Pageable pageable);
 
     Page<T> findAll(Specification<T> spec, Pageable pageable);
+
+    Page<T> findAll(Example<T> example,Pageable pageable);
 
     long count();
 
