@@ -2,11 +2,13 @@ package com.pateo.qingcloud.authority.service;
 
 import com.pateo.qingcloud.authority.domain.rbac.Role;
 import com.pateo.qingcloud.authority.domain.rbac.RoleResource;
+import com.pateo.qingcloud.authority.exception.DBException;
+import com.pateo.qingcloud.authority.menu.ResultEnum;
 import com.pateo.qingcloud.authority.repositry.ResourceRepository;
 import com.pateo.qingcloud.authority.repositry.RoleRepository;
 import com.pateo.qingcloud.authority.repositry.RoleResourceRepository;
 import com.pateo.qingcloud.authority.utils.QueryResultConverter;
-import com.pateo.qingcloud.authority.vo.rbac.RoleInfo;
+import com.pateo.qingcloud.authority.vo.input.RoleVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -35,27 +37,30 @@ public class RoleService {
 
     @Autowired
     private RoleResourceRepository roleResourceRepository;
+
     /**
-     * 创建角色
-     * @param roleInfo
+     * 创建角色/修改角色
+     * @param roleVo
      * @return
      */
-    public RoleInfo create(RoleInfo roleInfo){
+    public void save(RoleVo roleVo){
         Role role = new Role();
-        BeanUtils.copyProperties(roleInfo, role);
-        roleInfo.setId(roleRepository.save(role).getId());
-        return roleInfo;
+        //修改
+        if (StringUtils.isNotBlank(roleVo.getId())){
+            role=roleRepository.findOne(roleVo.getId());
+            if (StringUtils.isEmpty(role.getId())){
+                throw new DBException(ResultEnum.ROLE_NOT_EXIST);
+            }
+            BeanUtils.copyProperties(roleVo, role,"projectId");
+        }else {
+            BeanUtils.copyProperties(roleVo, role);
+        }
+
+        roleRepository.save(role);
     }
-    /**
-     * 修改角色
-     * @param roleInfo
-     * @return
-     */
-    public RoleInfo update(RoleInfo roleInfo){
-        Role role = roleRepository.findOne(roleInfo.getId());
-        BeanUtils.copyProperties(roleInfo, role);
-        return roleInfo;
-    }
+
+
+
     /**
      * 删除角色
      * @param id
@@ -72,9 +77,9 @@ public class RoleService {
      * @param id
      * @return
      */
-    public RoleInfo getInfo(Long id){
+    public RoleVo getInfo(Long id){
         Role role = roleRepository.findOne(id);
-        RoleInfo info = new RoleInfo();
+        RoleVo info = new RoleVo();
         BeanUtils.copyProperties(role, info);
         return info;
     }
@@ -82,8 +87,8 @@ public class RoleService {
      * 查询所有角色
      * @return
      */
-    public List<RoleInfo> findAll(){
-        return QueryResultConverter.convert(roleRepository.findAll(), RoleInfo.class);
+    public List<RoleVo> findAll(){
+        return QueryResultConverter.convert(roleRepository.findAll(), RoleVo.class);
     }
     /**
      * 通过roleId 查询资源id
@@ -114,4 +119,5 @@ public class RoleService {
             roleResourceRepository.save(roleResource);
         }
     }
+
 }

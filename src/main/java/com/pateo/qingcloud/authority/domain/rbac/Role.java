@@ -3,6 +3,7 @@ package com.pateo.qingcloud.authority.domain.rbac;
 import com.pateo.qingcloud.authority.support.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Table(name = "opt_role")
 @Getter
 @Setter
+@DynamicUpdate
 public class Role extends BaseEntity<String>{
     /**
      * 角色名称

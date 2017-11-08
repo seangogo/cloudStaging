@@ -41,9 +41,9 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
                 account.getOperableProjectIds().clear();
                 //遍历项目对应角色所拥有的资源
                 for (String id:projectIds){
-                    String urlid=permission.toString()+id;
-                    log.info("urlid:{}"+urlid);
-                    if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(urlid))){
+                    String urlId=permission.toString()+id;
+                    log.info("urlId:{}"+urlId);
+                    if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(urlId))){
                         account.getOperableProjectIds().add(id);
                     }
                 }

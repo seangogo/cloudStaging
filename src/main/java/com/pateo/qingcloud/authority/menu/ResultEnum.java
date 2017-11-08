@@ -22,6 +22,7 @@ public enum ResultEnum {
     PARENT_NOT_EXIST("1004","父节点不存在"),
     PROJECTIDID_NOT_EXIST("1005","无操作此项目权限"),
     RESOURCE_NOT_EXIST("1006","菜单不存在"),
+    ROLE_NOT_EXIST("1007","菜单不存在"),
 
     ;
 
