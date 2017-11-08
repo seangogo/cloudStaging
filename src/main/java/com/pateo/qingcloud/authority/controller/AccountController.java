@@ -4,7 +4,9 @@ package com.pateo.qingcloud.authority.controller;
 import com.pateo.qingcloud.authority.domain.User;
 import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.service.AccountService;
+import com.pateo.qingcloud.authority.utils.QueryResultConverter;
 import com.pateo.qingcloud.authority.vo.AccountOut;
+import com.pateo.qingcloud.authority.vo.input.AccountSelectVo;
 import com.pateo.qingcloud.authority.vo.input.AccountVo;
 import com.pateo.qingcloud.authority.vo.result.DataResult;
 import com.pateo.qingcloud.authority.vo.result.SimpleResponse;
@@ -12,14 +14,24 @@ import com.pateo.qingcloud.authority.vo.result.StateResult;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,7 +45,43 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    /**
+     *  分页动态查询
+     * @param pageable 默认的分页对象
+     * @param account  账号对象
+     * @param accountSelectVo 查询条件
+     * @return
+     */
+    @PostMapping(value = "/list")
+    @ApiOperation(value = "账户动态分页", httpMethod = "POST", response = DataResult.class,
+            notes = "模糊查询：realName，email，idcard,phone，匹配：sex")
+    public DataResult getUserList(@PageableDefault Pageable pageable,
+                                  @AuthenticationPrincipal Account account,
+                                  @ApiParam(name = "UserSelectVo", value = "用户列表查询条件")
+                                  @RequestBody AccountSelectVo accountSelectVo){
+        Specification querySpecifi = new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new ArrayList<>();
+                if(accountSelectVo.getCreatedDateStart()!=null){
+                    predicates.add(criteriaBuilder.greaterThan(root.get("createdDate"),
+                            accountSelectVo.getCreatedDateStart()));
+                }
+                if(null != accountSelectVo.getCreatedDateStart()){
+                    predicates.add(criteriaBuilder.lessThan(root.get("createdDate"),
+                            accountSelectVo.getCreatedDateEnd()));
+                }
+                if(null != accountSelectVo.getUserName()){
+                    predicates.add(criteriaBuilder.like(root.get("userName").as(String.class), "%"+accountSelectVo.getUserName()+"%"));
+                }
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
 
+
+            }
+        };
+        Page<Account> accounts=accountService.findAll(querySpecifi,pageable);
+        return DataResult.success(QueryResultConverter.convert(accounts, AccountVo.class, pageable));
+    }
 
     /**
      * 获取当前登录的管理员信息
@@ -41,13 +89,14 @@ public class AccountController {
      * @return
      */
     @SuppressWarnings("AlibabaAvoidApacheBeanUtilsCopy")
-    @GetMapping("/me")
+    @GetMapping("/authenticationInfo")
+    @ApiOperation(value = "登陆用户信息", httpMethod = "GET", response = DataResult.class, notes = "获取当前登录的管理员信息")
     public AccountOut me(@AuthenticationPrincipal @ApiParam(hidden = true) Account account)
             throws InvocationTargetException, IllegalAccessException {
         AccountOut accountOut = new AccountOut();
         accountOut.setUserName(account.getUsername());
         User user=account.getUser();
-        BeanUtils.copyProperties(accountOut, user);
+        BeanUtils.copyProperties(user,accountOut);
         return accountOut;
     }
 
@@ -92,12 +141,6 @@ public class AccountController {
         return accountService.getInfo(id,projectIds);
     }
 
-
-   /* @GetMapping
-    public Page<AdminInfo> query(AdminCondition condition, Pageable pageable) {
-        return adminService.query(condition, pageable);
-    }
-*/
 
 
 }

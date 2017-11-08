@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * @author sean
  * 2017/11/2.
  */
 @Entity
-@Table(name = "optNotice")
 @Getter
 @Setter
 public class Notice  extends BaseEntity<String>{
