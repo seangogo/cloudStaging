@@ -46,4 +46,9 @@ public class BrowserProperties {
 	 * 只在signInResponseType为REDIRECT时生效
 	 */
 	private String singInSuccessUrl;
+
+	/**
+	 * 超级管理员角色的code
+	 */
+	private String Sysdba;
 }

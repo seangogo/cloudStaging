@@ -18,6 +18,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -118,6 +119,7 @@ public class UserController {
      * @throws Exception
      */
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasPermission(#account,'user/delete_')")
     @ApiOperation(value = "查询用户详情", httpMethod = "GET", response = DataResult.class,
             notes = "用户详情信息，目前只有用户信息，之后补上对应账户角色")
     public DataResult details(@PathVariable String id,

@@ -3,9 +3,11 @@
  */
 package com.pateo.qingcloud.authority.service;
 
+import com.pateo.qingcloud.authority.config.security.properties.SecurityProperties;
 import com.pateo.qingcloud.authority.domain.rbac.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -20,7 +22,8 @@ import java.util.Set;
 @Component("rbacService")
 @Slf4j
 public class RbacService {
-
+	@Autowired
+	private SecurityProperties securityProperties;
 	private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
@@ -30,7 +33,7 @@ public class RbacService {
 
 		if (principal instanceof Account) {
 			//如果用户名是admin，就永远返回true
-			if (StringUtils.equals(((Account) principal).getUsername(), "admin")) {
+			if (StringUtils.equals(((Account) principal).getUsername(), securityProperties.getBrowser().getSysdba())) {
 				hasPermission = true;
 			} else {
 				// 读取用户所拥有权限的所有URL

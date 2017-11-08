@@ -15,4 +15,5 @@ public interface AccountRepository extends BaseRepository<Account,String> {
      * @return
      */
     Account findByUserName(String userName);
+    
 }

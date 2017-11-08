@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +29,7 @@ import javax.sql.DataSource;
  *
  */
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SecurityProperties securityProperties;
@@ -57,6 +60,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				 .failureHandler(pateoAuthenctiationFailureHandler)
 				 .and()
 				 .authorizeRequests()
+				 //只有管理员才有新建用户的权利
+				 .antMatchers("/new-user/**", "/delete-user-*").access("hasRole('admin_0')")
 				 .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
 						 "/signIn.html","/error/403.html","logout"
 						 ,"swagger-ui.html","/swagger-resources/**","/v2/**").permitAll()
@@ -66,7 +71,13 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 						 "/resource").authenticated()
 				 .anyRequest()
 				 .access("@rbacService.hasPermission(request, authentication)")
-		         .and().csrf().disable();
+		         .and().csrf().disable()
+				 //session过期后跳转路径
+				 .sessionManagement().invalidSessionUrl("/signIn.html")
+				 .and()
+				 //单点登录跳转路径
+				 .sessionManagement().maximumSessions(1).expiredUrl("/signIn.html")
+				 .and();
 	}
 
 
@@ -83,4 +94,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		return tokenRepository;
 	}
 
+
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
+	}
 }

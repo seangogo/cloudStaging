@@ -8,15 +8,13 @@ import com.pateo.qingcloud.authority.utils.TimeUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -116,9 +114,34 @@ public class Account extends BaseEntity<String> implements UserDetails {
     @Setter
     private Set<String> oldPasswords;
 
+    /**
+     * 可操作的项目Id(随调用的方法不用而更新)
+     */
+    @Transient
+    private Set<String> operableProjectIds =new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        Set<RoleAccount> userRoles = this.getRoles();
+        if(userRoles != null)
+        {
+            for (RoleAccount roleAccount : userRoles) {
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+roleAccount.getRole().getCode()
+                        +"_"+roleAccount.getRole().getProjectId());
+                authorities.add(authority);
+            }
+        }
+        Set<String> urls = this.getUrls();
+        Set<String> projectIds = this.getProjectIds();
+        if (urls!=null){
+            for (String url:urls){
+                for (String id:projectIds){
+                    authorities.add(new SimpleGrantedAuthority(url+"_"+id));
+                }
+            }
+        }
+        return authorities;
     }
 
     /**
@@ -273,4 +296,11 @@ public class Account extends BaseEntity<String> implements UserDetails {
         }
     }
 
+    public Set<String> getOperableProjectIds() {
+        return operableProjectIds;
+    }
+
+    public void setOperableProjectIds(Set<String> operableProjectIds) {
+        this.operableProjectIds = operableProjectIds;
+    }
 }

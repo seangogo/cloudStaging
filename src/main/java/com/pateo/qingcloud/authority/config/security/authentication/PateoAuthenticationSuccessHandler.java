@@ -50,6 +50,7 @@ public class PateoAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
 			response.setContentType("application/json;charset=UTF-8");
 			String type = authentication.getClass().getSimpleName();
 			Account account=(Account)authentication.getPrincipal();
+			log.info(account.getAuthorities().toString());
 			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(type)));
 		} else {
 			// 如果设置了imooc.security.browser.singInSuccessUrl，总是跳到设置的地址上
