@@ -60,11 +60,16 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				 .failureHandler(pateoAuthenctiationFailureHandler)
 				 .and()
 				 .authorizeRequests()
+				 //既不是匿名用户又不是自动登陆的用户才可以修改密码进一步保证用户账号安全性
+				 .antMatchers("/account/password/modify").fullyAuthenticated()
 				 //只有管理员才有新建用户的权利
-				 .antMatchers("/new-user/**", "/delete-user-*").access("hasRole('admin_0')")
+				 .antMatchers("/new-user/**", "/delete-user-*","/account/lock/**/**").access("hasRole('Sysdba_0')")
+				 //绑定角色只有管理员和超级管理才可以操作
+				/* .antMatchers("/role/**", "/resource/**")
+				 .access("hasRole('admin_*') or hasRole('Sysdba_0')")*/
 				 .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
 						 "/signIn.html","/error/403.html","logout"
-						 ,"swagger-ui.html","/swagger-resources/**","/v2/**").permitAll()
+						 ,"swagger-ui.html","/swagger-resources/**","/v2/**","/account/isUse").permitAll()
 				 .antMatchers(HttpMethod.GET,
 						 "/**/*.html",
 						 "/admin/me",

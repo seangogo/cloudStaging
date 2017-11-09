@@ -2,10 +2,12 @@ package com.pateo.qingcloud.authority.service;
 
 import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.domain.rbac.Resource;
+import com.pateo.qingcloud.authority.domain.rbac.Role;
 import com.pateo.qingcloud.authority.exception.DBException;
 import com.pateo.qingcloud.authority.menu.ResultEnum;
 import com.pateo.qingcloud.authority.repositry.AccountRepository;
 import com.pateo.qingcloud.authority.repositry.ResourceRepository;
+import com.pateo.qingcloud.authority.repositry.RoleRepository;
 import com.pateo.qingcloud.authority.vo.input.ResourceVo;
 import com.pateo.qingcloud.authority.vo.rbac.ResourceInfo;
 import org.apache.commons.lang.StringUtils;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -30,6 +33,9 @@ public class ResourceService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     /**
      * 获取资源树
@@ -141,5 +147,21 @@ public class ResourceService {
         }
         resourceRepository.save(resource);
         return resource.getParent().getId();
+    }
+
+    /**
+     * 获取角色资树
+     * @param id
+     * @param operableProjectIds
+     * @return
+     */
+    public ResourceInfo getRoleTree(String id, Set<String> operableProjectIds) {
+        Role role  = roleRepository.findOne(id);
+        if (!operableProjectIds.contains("0")
+                &&!operableProjectIds.contains(role.getProjectId())){
+            throw  new DBException(ResultEnum.PROJECTIDID_NOT_EXIST);
+
+        }
+        return resourceRepository.findByName("根节点").roletoTree(role);
     }
 }

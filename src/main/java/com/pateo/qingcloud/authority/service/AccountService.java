@@ -2,7 +2,9 @@ package com.pateo.qingcloud.authority.service;
 
 import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.domain.rbac.RoleAccount;
+import com.pateo.qingcloud.authority.exception.DBException;
 import com.pateo.qingcloud.authority.menu.AccountStatus;
+import com.pateo.qingcloud.authority.menu.ResultEnum;
 import com.pateo.qingcloud.authority.repositry.AccountRepository;
 import com.pateo.qingcloud.authority.repositry.RoleAccountRepository;
 import com.pateo.qingcloud.authority.repositry.RoleRepository;
@@ -12,6 +14,7 @@ import com.pateo.qingcloud.authority.vo.AccountOut;
 import com.pateo.qingcloud.authority.vo.input.AccountVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -89,7 +92,7 @@ public class AccountService extends BaseServiceImpl<Account,String> {
     }
 
     /**
-     *  删除账号（逻辑删除）
+     *  删除账号（物理删除）
      * @param id 要删除的账户Id
      * @param projectIds 可以操作的项目Id集合
      */
@@ -108,7 +111,11 @@ public class AccountService extends BaseServiceImpl<Account,String> {
      * @return
      */
     public AccountOut getInfo(String id, Set<String> projectIds) {
-        if (!projectIds.contains(find(id).getUser().getProjectId())){
+        Account account=find(id);
+        if (account==null){
+            throw new DBException(ResultEnum.DATA_NOT_EXIST);
+        }
+        if (!projectIds.contains(account.getUser().getProjectId())){
             throw  new AccessDeniedException("权限不足");
         }
         return null;
@@ -122,6 +129,33 @@ public class AccountService extends BaseServiceImpl<Account,String> {
     @Transactional(rollbackFor=Exception.class)
     public void updatePassword(String accounId, String newPassword) {
         myUserDetailsService.changePassword(accounId,newPassword);
+    }
+
+    /**
+     * 用户名是否可用
+     * @param userName
+     * @return
+     */
+    public boolean isUser(String userName) {
+        Account account=new Account();
+        account.setUsername(userName);
+        return !accountRepository.exists(Example.of(account));
+    }
+
+    /**
+     * 锁定/解锁 账户
+     * @param accountId
+     * @param lock
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void locked(String accountId, boolean lock)throws Exception {
+        Account account=accountRepository.findOne(accountId);
+        if (account==null){
+            throw  new DBException(ResultEnum.DATA_NOT_EXIST);
+        }
+        account.setStatus(lock?AccountStatus.LOCK:AccountStatus.NORMAL);
+        accountRepository.save(account);
     }
 }
 

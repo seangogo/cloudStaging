@@ -30,14 +30,13 @@ public class RbacService {
 		Object principal = authentication.getPrincipal();
 
 		boolean hasPermission = false;
-
 		if (principal instanceof Account) {
+			Account account=(Account) principal;
 			//如果用户名是admin，就永远返回true
-			if (StringUtils.equals(((Account) principal).getUsername(), securityProperties.getBrowser().getSysdba())) {
+			if (StringUtils.equals(account.getUsername(), securityProperties.getBrowser().getSysdba())) {
 				hasPermission = true;
 			} else {
 				// 读取用户所拥有权限的所有URL
-				Account account=(Account) principal;
 				Set<String> urls = account.getUrls();
 				Set<String> projectId=account.getProjectIds();
 				log.info("项目ID:{}",projectId);

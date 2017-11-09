@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("project")
-@Api(value = "project", description = "项目操作")
+@Api(value = "project", description = "项目模块接口")
 public class ProjectController {
 
     @Autowired

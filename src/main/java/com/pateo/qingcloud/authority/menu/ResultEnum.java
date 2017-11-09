@@ -14,7 +14,7 @@ public enum ResultEnum {
     SERVICE_RESPONSE_SERVICE_DISABLED("404","The service has been disabled"),
     SERVICE_RESPONSE_ERROR_CODE("500","Inner server errors"),
     FEIGN_CLIENT_ERROR("20010","目标服务停止工作"),
-    DATA_NOT_EXIST("402","No data info is found"),
+    DATA_NOT_EXIST("402","数据不存在"),
     OBJ_NOT_EXIST("10", "对象不存在"),
     CODE_ERROR("1001", "验证码不正确"),
     EMAIL_EXIST("1002","帐号|Email已经存在！"),
@@ -22,9 +22,11 @@ public enum ResultEnum {
     PARENT_NOT_EXIST("1004","父节点不存在"),
     PROJECTIDID_NOT_EXIST("1005","无操作此项目权限"),
     RESOURCE_NOT_EXIST("1006","菜单不存在"),
-    ROLE_NOT_EXIST("1007","菜单不存在"),
+    ROLE_NOT_EXIST("1007","角色不存在"),
     ACCOUNT_NOT_EXIST("1008","账户不存在"),
     PASSWORD_NOT_MATCHING("1009","密码不匹配"),
+    DATA_BIND_NOT_DELETE("1010","有数据绑定,不能删除"),
+    ACCOUNT_DISABLED("1010","账户不可用"),
 
     ;
 

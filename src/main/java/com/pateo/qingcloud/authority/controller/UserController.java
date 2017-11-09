@@ -122,7 +122,7 @@ public class UserController {
     @PreAuthorize("hasPermission(#account,'user/delete_')")
     @ApiOperation(value = "查询用户详情", httpMethod = "GET", response = DataResult.class,
             notes = "用户详情信息，目前只有用户信息，之后补上对应账户角色")
-    public DataResult details(@PathVariable String id,
+    public DataResult details(@PathVariable(value ="id") String id,
                               @AuthenticationPrincipal Account account) throws Exception {
         return DataResult.success(userService.details(id,account.getProjectIds()));
     }

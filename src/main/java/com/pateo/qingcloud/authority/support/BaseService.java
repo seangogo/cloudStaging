@@ -14,6 +14,7 @@ public interface BaseService<T, ID extends Serializable> {
 
     List<T> findAll();
 
+
    // public abstract List<T> findList(ID[] ids);
 
    // public abstract List<T> findList(Iterable<ID> ids);

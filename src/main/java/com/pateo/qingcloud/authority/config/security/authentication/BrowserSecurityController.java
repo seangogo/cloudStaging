@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pateo.qingcloud.authority.controller;
+package com.pateo.qingcloud.authority.config.security.authentication;
 
 
 import com.pateo.qingcloud.authority.config.security.properties.SecurityConstants;

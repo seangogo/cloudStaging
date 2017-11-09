@@ -43,7 +43,7 @@ public class PateoAuthenctiationFailureHandler extends SimpleUrlAuthenticationFa
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
 		
-		logger.info("登录失败");
+		logger.info("登录失败:{}",exception.getMessage());
 		logger.info(LoginResponseType.JSON.name());
 		if (LoginResponseType.JSON.equals(securityProperties.getBrowser())) {
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());

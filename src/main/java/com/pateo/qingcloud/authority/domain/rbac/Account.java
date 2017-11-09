@@ -74,7 +74,7 @@ public class Account extends BaseEntity<String> implements UserDetails {
      */
     @Getter
     @Setter
-    private Date expire_time;
+    private Date expireTime;
 
     /**
     *密码修改时间
@@ -88,7 +88,7 @@ public class Account extends BaseEntity<String> implements UserDetails {
      */
     @Getter
     @Setter
-    private long account_lock_time;
+    private long accounLockTime;
 
     /**
      * 创建方式:0手动，1自动勾选，2自动导入
@@ -200,7 +200,7 @@ public class Account extends BaseEntity<String> implements UserDetails {
      */
     @Override
     public boolean isCredentialsNonExpired() {
-        return TimeUtils.UDateToLocalDate(this.getExpire_time()).isAfter(LocalDate.now());
+        return TimeUtils.UDateToLocalDate(this.getExpireTime()).isAfter(LocalDate.now());
     }
 
     /**

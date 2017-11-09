@@ -1,5 +1,7 @@
 package com.pateo.qingcloud.authority.support;
 
+import com.pateo.qingcloud.authority.exception.DBException;
+import com.pateo.qingcloud.authority.menu.ResultEnum;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -70,8 +72,11 @@ public abstract class BaseServiceImpl<T extends BaseEntity, ID extends Serializa
     }
 
     @Override
-    public void delete(ID id) {
+    public void delete(ID id) throws DBException{
         T t=getBaseDao().findOne(id);
+        if (t==null){
+            throw new DBException(ResultEnum.DATA_NOT_EXIST);
+        }
         t.setDelFlag(1);
         getBaseDao().save(t);
     }

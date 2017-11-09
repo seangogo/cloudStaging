@@ -13,6 +13,7 @@ import com.pateo.qingcloud.authority.vo.input.AccountVo;
 import com.pateo.qingcloud.authority.vo.result.DataResult;
 import com.pateo.qingcloud.authority.vo.result.SimpleResponse;
 import com.pateo.qingcloud.authority.vo.result.StateResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ import java.util.Set;
  * @author seangogo
  */
 @RestController
+@Api(value = "account", description = "账户模块接口")
 @RequestMapping("account")
 @Slf4j
 public class AccountController {
@@ -50,6 +52,54 @@ public class AccountController {
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
+
+    /**
+     * 账户名是否存在
+     * @param userName
+     * @return
+     */
+    @GetMapping("/isUse/{userName}")
+    @ApiOperation(value = "账户名是否可用",httpMethod = "GET",response =Boolean.class,
+                notes = "返回boolean  true=可以使用 false=不能使用")
+    public boolean isUse(
+            @ApiParam(name = "userName", value = "用户名")
+            @PathVariable(value = "userName") String userName){
+        return accountService.isUser(userName);
+
+    }
+
+    /**
+     * 锁定账户
+     * @param id
+     * @return
+     */
+    @PostMapping("/lock/{id}/{lock}")
+    @ApiOperation(value = "锁定账户",httpMethod = "POST",response =StateResult.class,
+            notes = "返回boolean  true=可以使用 false=不能使用")
+    public StateResult lock(@ApiParam(name = "id", value = "账户Id")
+                        @PathVariable(value = "id") String id,
+                        @ApiParam(name = "lock", value = "是否锁定,true=锁定,false=解锁")
+                        @PathVariable(value = "lock") boolean lock) throws Exception {
+        accountService.locked(id,lock);
+        return StateResult.success();
+
+    }
+
+    /**
+     * 账户删除 （逻辑删除）
+     */
+    @PostMapping("/delete/{id}")
+    @ApiOperation(value = "删除账户",httpMethod = "POST",response =StateResult.class,
+            notes = "删除账号")
+    public StateResult delete(@ApiParam(name = "id", value = "账户Id")
+                            @PathVariable(value = "id") String id) throws Exception {
+        accountService.delete(id);
+        return StateResult.success();
+
+    }
+
+
+
 
     /**
      *  分页动态查询
@@ -138,8 +188,10 @@ public class AccountController {
      * @return
      */
     @GetMapping("/{id}")
-    public AccountOut getInfo(@ApiParam(hidden = true)@AuthenticationPrincipal Account account
-                              ,@PathVariable String id) {
+    @ApiOperation(value = "查询账户详情", httpMethod = "GET",
+            response = DataResult.class, notes = "查询账户详情(权限验证未加)")
+    public AccountOut getInfo(@ApiParam(hidden = true)@AuthenticationPrincipal Account account,
+                              @ApiParam(name = "id", value = "账户Id")@PathVariable String id) {
         Set<String> projectIds=account.getProjectIds();
         return accountService.getInfo(id,projectIds);
     }

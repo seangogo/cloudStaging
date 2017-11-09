@@ -1,12 +1,15 @@
 package com.pateo.qingcloud.authority.service;
 
+import com.pateo.qingcloud.authority.domain.rbac.Account;
 import com.pateo.qingcloud.authority.domain.rbac.Role;
+import com.pateo.qingcloud.authority.domain.rbac.RoleAccount;
 import com.pateo.qingcloud.authority.domain.rbac.RoleResource;
 import com.pateo.qingcloud.authority.exception.DBException;
+import com.pateo.qingcloud.authority.menu.AccountStatus;
 import com.pateo.qingcloud.authority.menu.ResultEnum;
-import com.pateo.qingcloud.authority.repositry.ResourceRepository;
-import com.pateo.qingcloud.authority.repositry.RoleRepository;
-import com.pateo.qingcloud.authority.repositry.RoleResourceRepository;
+import com.pateo.qingcloud.authority.repositry.*;
+import com.pateo.qingcloud.authority.support.BaseRepository;
+import com.pateo.qingcloud.authority.support.BaseServiceImpl;
 import com.pateo.qingcloud.authority.utils.QueryResultConverter;
 import com.pateo.qingcloud.authority.vo.input.RoleVo;
 import org.apache.commons.collections.CollectionUtils;
@@ -27,7 +30,7 @@ import java.util.Set;
  */
 @Service
 @Transactional
-public class RoleService {
+public class RoleService extends BaseServiceImpl<Role,String> {
 
     @Autowired
     private RoleRepository roleRepository;
@@ -37,6 +40,17 @@ public class RoleService {
 
     @Autowired
     private RoleResourceRepository roleResourceRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private RoleAccountRepository roleAccountRepository;
+
+    @Override
+    public BaseRepository<Role, String> getBaseDao() {
+        return this.roleRepository;
+    }
 
     /**
      * 创建角色/修改角色
@@ -77,17 +91,24 @@ public class RoleService {
      * @param id
      * @return
      */
-    public RoleVo getInfo(Long id){
+    public RoleVo getInfo(String id) throws Exception{
+
         Role role = roleRepository.findOne(id);
+        if (role==null){
+            throw  new DBException(ResultEnum.ROLE_NOT_EXIST);
+        }
         RoleVo info = new RoleVo();
         BeanUtils.copyProperties(role, info);
         return info;
     }
+
+
+
     /**
      * 查询所有角色
      * @return
      */
-    public List<RoleVo> findAll(){
+    public List<RoleVo> findAllVo(){
         return QueryResultConverter.convert(roleRepository.findAll(), RoleVo.class);
     }
     /**
@@ -120,4 +141,51 @@ public class RoleService {
         }
     }
 
+    /**
+     * 删除角色
+     * @param id
+     * @param projectIds
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteRole(String id, Set<String> projectIds) throws Exception{
+        Role role=roleRepository.findOne(id);
+        if (role==null){
+            throw new DBException(ResultEnum.DATA_NOT_EXIST);
+        }
+        if (role.getAccounts().size()>0||
+                role.getResources().size()>0){
+            throw new DBException(ResultEnum.DATA_BIND_NOT_DELETE);
+        }
+        if (!projectIds.contains(0)&&!projectIds.contains(role.getProjectId())){
+            throw new DBException(ResultEnum.PROJECTIDID_NOT_EXIST);
+        }
+        roleRepository.delete(role);
+    }
+
+    /**
+     * 账户绑定角色
+     * @param accountId
+     * @param roleId
+     * @param operableProjectIds
+     */
+    public void bindAccount(String accountId, String roleId, Set<String> operableProjectIds) {
+        //验证权限
+        Role role=roleRepository.findOne(roleId);
+        Account account=accountRepository.findOne(accountId);
+        if (account.getStatus()!= AccountStatus.NORMAL
+                ||account.getDelFlag()==1){
+            throw new DBException(ResultEnum.RESOURCE_NOT_EXIST);
+        }
+        if (role==null||account==null){
+            throw new DBException(ResultEnum.DATA_NOT_EXIST);
+        }
+        if(!operableProjectIds.contains("0")&&
+                !operableProjectIds.contains(role.getProjectId())){
+            throw new DBException(ResultEnum.PROJECTIDID_NOT_EXIST);
+        }
+        RoleAccount roleAccount=new RoleAccount();
+        roleAccount.setAccount(account);
+        roleAccount.setRole(role);
+        roleAccountRepository.save(roleAccount);
+    }
 }

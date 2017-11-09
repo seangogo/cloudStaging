@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author seangogo
  */
 @RestController
-@Api(value = "resource", description = "资源相关接口")
+@Api(value = "resource", description = "资源模块接口")
 @RequestMapping("/resource")
 public class ResourceController {
 
@@ -26,15 +27,31 @@ public class ResourceController {
     private ResourceService resourceService;
 
     /**
+     * 获取根据角色的所有权限
+     * @param account 账户
+     * @return
+     */
+    @GetMapping("/roleTree/{id}")
+    @ApiOperation(value = "获取角色资源树", httpMethod = "GET",
+            response = DataResult.class, notes = "区分项目Id,超级管理员可以查看所有,普通管理员只能查看单一项目")
+    @PreAuthorize("hasPermission(#account,'/resource/roleTree/**_')")
+    public ResourceInfo getRoleTree(@AuthenticationPrincipal Account account,
+                                    @ApiParam(required = true, name = "id", value = "角色ID")
+                                    @PathVariable String id){
+        return resourceService.getRoleTree(id,account.getOperableProjectIds());
+    }
+
+    /**
      * 获取资源树
      * @param account 账户
      * @return
      */
     @GetMapping
-    @ApiOperation(value = "获取资源树", httpMethod = "GET", response = DataResult.class, notes = "不区分项目Id")
-    public ResourceInfo getTree(@AuthenticationPrincipal Account account){
+    @ApiOperation(value = "获取自己资源树", httpMethod = "GET", response = DataResult.class, notes = "不区分项目Id")
+    public ResourceInfo getOneselfTree(@AuthenticationPrincipal Account account){
         return resourceService.getTree(account.getId());
     }
+
     /**
      * 获取资源信息
      * @param id

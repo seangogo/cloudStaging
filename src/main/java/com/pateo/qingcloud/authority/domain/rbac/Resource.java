@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -84,6 +85,23 @@ public class Resource extends BaseEntity<String> {
             if(StringUtils.equals(account.getUsername(), "admin") ||
                     resourceIds.contains(child.getId())){
                 children.add(child.toTree(account));
+            }
+        }
+        result.setChildren(children);
+        return result;
+    }
+
+    public ResourceInfo roletoTree(Role role) {
+        ResourceInfo result = new ResourceInfo();
+        BeanUtils.copyProperties(this, result);
+        Set<String> resourceIds=new HashSet();
+        for (RoleResource roleResource:role.getResources()){
+            resourceIds.add(roleResource.getResource().getId());
+        }
+                List<ResourceInfo> children = new ArrayList();
+        for (Resource child : getChilds()) {
+            if(resourceIds.contains(child.getId())){
+                children.add(child.roletoTree(role));
             }
         }
         result.setChildren(children);
