@@ -23,6 +23,8 @@ public enum ResultEnum {
     PROJECTIDID_NOT_EXIST("1005","无操作此项目权限"),
     RESOURCE_NOT_EXIST("1006","菜单不存在"),
     ROLE_NOT_EXIST("1007","菜单不存在"),
+    ACCOUNT_NOT_EXIST("1008","账户不存在"),
+    PASSWORD_NOT_MATCHING("1009","密码不匹配"),
 
     ;
 

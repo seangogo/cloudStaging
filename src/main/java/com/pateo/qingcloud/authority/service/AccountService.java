@@ -40,6 +40,12 @@ public class AccountService extends BaseServiceImpl<Account,String> {
     @Autowired
     private RoleRepository roleRepository;
 
+
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+
+
+
     @Override
     public BaseRepository<Account, String> getBaseDao() {
         return this.accountRepository;
@@ -56,20 +62,15 @@ public class AccountService extends BaseServiceImpl<Account,String> {
      * @param accountVo
      * @return
      */
-    @Transactional
-    public AccountVo create(AccountVo accountVo) {
-
+    @Transactional(rollbackFor= Exception.class)
+    public void create(AccountVo accountVo) {
         Account account = new Account();
         account.setUsername(accountVo.getUserName());
         account.setAccountWay(accountVo.getAccountWay());
-        account.setId(null);
         account.setPassword(passwordEncoder.encode(accountVo.getPassword()));
         account.setStatus(AccountStatus.NOT_ACTIVE);
         accountRepository.save(account);
-        accountVo.setId(account.getId());
         createRoleAdmin(accountVo, account);
-
-        return accountVo;
     }
 
     /**
@@ -111,6 +112,16 @@ public class AccountService extends BaseServiceImpl<Account,String> {
             throw  new AccessDeniedException("权限不足");
         }
         return null;
+    }
+
+    /**
+     * 修改密码
+     * @param oldPassword
+     * @param newPassword
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public void updatePassword(String accounId, String newPassword) {
+        myUserDetailsService.changePassword(accounId,newPassword);
     }
 }
 

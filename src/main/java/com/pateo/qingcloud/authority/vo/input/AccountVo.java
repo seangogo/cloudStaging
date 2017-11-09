@@ -7,8 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -19,23 +19,18 @@ import javax.validation.constraints.Pattern;
 @Setter
 @ToString
 public class AccountVo {
-    /**
-     * id
-     */
-    @ApiModelProperty(value = "账户ID",position = 0)
-    private String id;
 
     /**
      * 用户名
      */
     @ApiModelProperty(value = "用户名:6-16字符",position = 1)
-    @Pattern(regexp="^[\\w]{6,16}$",message = "账号输入有误")
+    @Pattern(regexp="^[\\w]{6,16}$",message = "账号输入有误,字符+数字6-16")
     private String userName;
 
     /**
      * 密码
      */
-    @Pattern(regexp="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$",message = "密码输入有误")
+    @Pattern(regexp="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$",message = "密码输入有误,字符+数字6-16")
     @ApiModelProperty(value = "未加密过的密码：字符+数字6-16",position = 2)
     private String password;
 
@@ -43,8 +38,8 @@ public class AccountVo {
      * 角色id
      */
     @ApiModelProperty(value = "默认角色id",position = 3,notes = "角色ID为单选框")
-    @Min(value = 1,message = "角色id不能小于1")
-    private Long roleId;
+    @Range(min = 36,max = 36,message = "角色数据有误")
+    private String roleId;
 
     /**
      * 创建方式:0手动，1自动勾选，2自动导入
