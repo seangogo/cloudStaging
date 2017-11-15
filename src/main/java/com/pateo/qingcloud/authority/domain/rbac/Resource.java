@@ -65,7 +65,7 @@ public class Resource extends BaseEntity<String> {
     /**
      * 序号
      */
-    private Long sort=System.currentTimeMillis();
+    private Long sort;
 
     /**
      * 子资源

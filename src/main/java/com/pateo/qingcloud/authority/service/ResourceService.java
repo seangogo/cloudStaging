@@ -8,6 +8,8 @@ import com.pateo.qingcloud.authority.menu.ResultEnum;
 import com.pateo.qingcloud.authority.repositry.AccountRepository;
 import com.pateo.qingcloud.authority.repositry.ResourceRepository;
 import com.pateo.qingcloud.authority.repositry.RoleRepository;
+import com.pateo.qingcloud.authority.support.BaseRepository;
+import com.pateo.qingcloud.authority.support.BaseServiceImpl;
 import com.pateo.qingcloud.authority.vo.input.ResourceVo;
 import com.pateo.qingcloud.authority.vo.rbac.ResourceInfo;
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +29,7 @@ import java.util.Set;
  */
 @Service
 @Transactional
-public class ResourceService {
+public class ResourceService extends BaseServiceImpl<Resource,String> {
 
     @Autowired
     private ResourceRepository resourceRepository;
@@ -36,6 +39,13 @@ public class ResourceService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+
+
+    @Override
+    public BaseRepository<Resource, String> getBaseDao() {
+        return this.resourceRepository;
+    }
 
     /**
      * 获取资源树
@@ -85,12 +95,14 @@ public class ResourceService {
         //修改
         if (!StringUtils.isEmpty(vo.getId())){
             resource=resourceRepository.findOne(vo.getId());
-            if (StringUtils.isEmpty(resource.getId())){
+            if (resource==null||StringUtils.isEmpty(resource.getId())){
                 throw new DBException(ResultEnum.RESOURCE_NOT_EXIST);
             }
         }
         BeanUtils.copyProperties(vo, resource);
         parent.addChild(resource);
+        Date date=new Date();
+        resource.setSort(date.getTime());//1700年到现在已经过去的毫秒数
         resourceRepository.save(resource);
     }
     /**
@@ -106,6 +118,8 @@ public class ResourceService {
         BeanUtils.copyProperties(info, resource);
         return info;
     }
+
+
     /**
      * 根据指定ID删除资源信息
      *
@@ -113,7 +127,7 @@ public class ResourceService {
      * @date  2015年7月10日下午7:01:57
      * @since 1.0.0
      */
-    public void delete(Long id){
+    public void delete(String id){
         resourceRepository.delete(id);
     }
     /**
