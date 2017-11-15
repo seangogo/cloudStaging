@@ -42,7 +42,7 @@ public class PateoAuthenctiationFailureHandler extends SimpleUrlAuthenticationFa
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-		
+
 		logger.info("登录失败:{}",exception.getMessage());
 		logger.info(LoginResponseType.JSON.name());
 		if (LoginResponseType.JSON.equals(securityProperties.getBrowser())) {
@@ -53,6 +53,6 @@ public class PateoAuthenctiationFailureHandler extends SimpleUrlAuthenticationFa
 			setDefaultFailureUrl("/error/402.html");
 			super.onAuthenticationFailure(request, response, exception);
 		}
-		
+
 	}
 }

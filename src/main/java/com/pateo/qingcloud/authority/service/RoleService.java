@@ -156,10 +156,10 @@ public class RoleService extends BaseServiceImpl<Role,String> {
                 role.getResources().size()>0){
             throw new DBException(ResultEnum.DATA_BIND_NOT_DELETE);
         }
-        if (!projectIds.contains(0)&&!projectIds.contains(role.getProjectId())){
+        if (!projectIds.contains("0")&&!projectIds.contains(role.getProjectId())){
             throw new DBException(ResultEnum.PROJECTIDID_NOT_EXIST);
         }
-        roleRepository.delete(role);
+        delete(role.getId());
     }
 
     /**

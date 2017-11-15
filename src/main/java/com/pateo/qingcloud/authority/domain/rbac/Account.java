@@ -84,11 +84,11 @@ public class Account extends BaseEntity<String> implements UserDetails {
     private Date updatePassword;
 
     /**
-     * 账户锁定时间
+     * 账户锁定时间(默认30天)
      */
     @Getter
     @Setter
-    private long accounLockTime;
+    private long accountLockTime=2592000000L;
 
     /**
      * 创建方式:0手动，1自动勾选，2自动导入

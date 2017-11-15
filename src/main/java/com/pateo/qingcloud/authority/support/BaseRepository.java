@@ -15,4 +15,6 @@ import java.io.Serializable;
 @NoRepositoryBean
 public interface BaseRepository<T extends BaseEntity,ID extends Serializable>
         extends JpaRepository<T, Serializable>, JpaSpecificationExecutor<T> {
+
+    T findByIdAndDelFlag(ID id, int i);
 }

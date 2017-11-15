@@ -33,7 +33,8 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
         if (principal instanceof Account) {
             Account account=(Account) principal;
             //如果用户名是，就永远返回true
-            if (StringUtils.equals((account).getUsername(), securityProperties.getBrowser().getSysdba()+"1")) {
+            if (StringUtils.equals((account).getUsername(), securityProperties.getBrowser().getSysdba())) {
+                account.getOperableProjectIds().add("0");
                 return true;
             } else {
                 //获取所有项目权限

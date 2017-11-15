@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Pattern;
 
@@ -34,12 +33,6 @@ public class AccountVo {
     @ApiModelProperty(value = "未加密过的密码：字符+数字6-16",position = 2)
     private String password;
 
-    /**
-     * 角色id
-     */
-    @ApiModelProperty(value = "默认角色id",position = 3,notes = "角色ID为单选框")
-    @Range(min = 36,max = 36,message = "角色数据有误")
-    private String roleId;
 
     /**
      * 创建方式:0手动，1自动勾选，2自动导入

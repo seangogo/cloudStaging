@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pateo.qingcloud.authority.config.security.properties.LoginResponseType;
 import com.pateo.qingcloud.authority.config.security.properties.SecurityProperties;
 import com.pateo.qingcloud.authority.domain.rbac.Account;
-import com.pateo.qingcloud.authority.vo.result.SimpleResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 浏览器环境下登录成功的处理器
@@ -46,12 +47,13 @@ public class PateoAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
                                         Authentication authentication) throws IOException, ServletException {
 
 		log.info("登录成功");
-		if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getSignInResponseType())) {
+ 			if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getSignInResponseType())) {
 			response.setContentType("application/json;charset=UTF-8");
-			String type = authentication.getClass().getSimpleName();
 			Account account=(Account)authentication.getPrincipal();
-			log.info(account.getAuthorities().toString());
-			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(type)));
+			Map<String,String> result=new HashMap(2);
+			result.put("status","ok");
+			result.put("type","account");
+			response.getWriter().write(objectMapper.writeValueAsString(result));
 		} else {
 			// 如果设置了imooc.security.browser.singInSuccessUrl，总是跳到设置的地址上
 			// 如果没设置，则尝试跳转到登录之前访问的地址上，如果登录前访问地址为空，则跳到网站根路径上

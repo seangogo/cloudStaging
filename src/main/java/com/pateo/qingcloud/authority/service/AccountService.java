@@ -1,10 +1,10 @@
 package com.pateo.qingcloud.authority.service;
 
 import com.pateo.qingcloud.authority.domain.rbac.Account;
-import com.pateo.qingcloud.authority.domain.rbac.RoleAccount;
 import com.pateo.qingcloud.authority.exception.DBException;
 import com.pateo.qingcloud.authority.menu.AccountStatus;
 import com.pateo.qingcloud.authority.menu.ResultEnum;
+import com.pateo.qingcloud.authority.menu.Sex;
 import com.pateo.qingcloud.authority.repositry.AccountRepository;
 import com.pateo.qingcloud.authority.repositry.RoleAccountRepository;
 import com.pateo.qingcloud.authority.repositry.RoleRepository;
@@ -73,7 +73,7 @@ public class AccountService extends BaseServiceImpl<Account,String> {
         account.setPassword(passwordEncoder.encode(accountVo.getPassword()));
         account.setStatus(AccountStatus.NOT_ACTIVE);
         accountRepository.save(account);
-        createRoleAdmin(accountVo, account);
+        //createRoleAdmin(accountVo, account);
     }
 
     /**
@@ -85,10 +85,10 @@ public class AccountService extends BaseServiceImpl<Account,String> {
         if (CollectionUtils.isNotEmpty(account.getRoles())) {
             roleAccountRepository.delete(account.getRoles());
         }
-        RoleAccount roleAccount = new RoleAccount();
+       /* RoleAccount roleAccount = new RoleAccount();
         roleAccount.setRole(roleRepository.getOne(accountVo.getRoleId()));
         roleAccount.setAccount(account);
-        roleAccountRepository.save(roleAccount);
+        roleAccountRepository.save(roleAccount);*/
     }
 
     /**
@@ -115,10 +115,20 @@ public class AccountService extends BaseServiceImpl<Account,String> {
         if (account==null){
             throw new DBException(ResultEnum.DATA_NOT_EXIST);
         }
-        if (!projectIds.contains(account.getUser().getProjectId())){
+        if (account.getUser()!=null&&!projectIds.contains(account.getUser().getProjectId())
+                &&!projectIds.contains("0")){
             throw  new AccessDeniedException("权限不足");
         }
-        return null;
+        AccountOut accountOut= new AccountOut();
+        accountOut.setRealName(account.getUser()==null?"":account.getUser().getRealName());
+        accountOut.setEmail(account.getUser()==null?"":account.getUser().getEmail());
+        accountOut.setImgUrl(account.getUser()==null?"":account.getUser().getImgUrl());
+        accountOut.setPhone(account.getUser()==null?"":account.getUser().getPhone());
+        accountOut.setSex(account.getUser()==null? Sex.MALE:account.getUser().getSex());
+        accountOut.setUserName(account.getUsername());
+        accountOut.setProjectIds(account.getProjectIds());
+
+        return accountOut;
     }
 
     /**

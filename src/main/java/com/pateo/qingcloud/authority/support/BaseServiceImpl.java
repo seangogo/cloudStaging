@@ -23,7 +23,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity, ID extends Serializa
 
     @Override
     public T find(ID id) {
-        return getBaseDao().findOne(id);
+        return getBaseDao().findByIdAndDelFlag(id,0);
     }
 
     @Override	

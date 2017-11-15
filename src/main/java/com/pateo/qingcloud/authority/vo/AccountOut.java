@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 
+import java.util.Set;
+
 /**
  * Created by sean on 2017/11/6.
  */
@@ -46,6 +48,6 @@ public class AccountOut {
     /**
      * 项目ID
      */
-    private Long projectId;
+    private Set<String> projectIds;
 
 }

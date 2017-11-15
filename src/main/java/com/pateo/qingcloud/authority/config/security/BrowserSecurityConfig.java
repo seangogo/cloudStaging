@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsUtils;
 
 import javax.sql.DataSource;
 
@@ -52,7 +53,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		 http .formLogin()
+
+		//.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+		 http.cors().and()
+				 .formLogin()
 				 .loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
 				 .loginProcessingUrl(SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM)
 				 .failureUrl("/error/403.html")
@@ -70,6 +74,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				 .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
 						 "/signIn.html","/error/403.html","logout"
 						 ,"swagger-ui.html","/swagger-resources/**","/v2/**","/account/isUse").permitAll()
+				 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 				 .antMatchers(HttpMethod.GET,
 						 "/**/*.html",
 						 "/admin/me",

@@ -65,11 +65,12 @@ public class UserService extends BaseServiceImpl<User,String>{
      * @param id
      * @param projectIds
      */
+    @Transactional(rollbackFor = Exception.class)
     public void deleteUser(String id, Set<String> projectIds)throws DBException {
         if (userRepository.exists(id)){
            User user=userRepository.findOne(id);
             if (projectIds.contains(user.getProjectId())){
-                userRepository.delete(user);
+                delete(user.getId());
             }else {
                 throw new DBException(ResultEnum.PROJECTIDID_NOT_EXIST);
             }
